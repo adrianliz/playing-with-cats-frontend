@@ -12,7 +12,7 @@ export default function QuestionCard({question}: { question: Question }) {
             <div className="flex flex-col items-center">
                 <div className="m-8">
                     <img className="border-2 border-gray-300 p-1 object-contain rounded-lg"
-                         src={question.cat.imageUrl} alt="question-cat-image"/>
+                         src={question.cat.imageUrl} alt="question-cat-image" loading="lazy" />
                 </div>
                 <div className="flex flex-col items-center w-2/3">
                     {question.breeds.map((breed) => (
