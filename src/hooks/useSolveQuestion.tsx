@@ -1,44 +1,24 @@
 import {Answer} from "../models/Answer.tsx";
-import {QuestionStatus} from "../models/QuestionStatus.tsx";
 import {useEffect, useState} from "react";
-
-const API_URL = 'http://localhost:8080/questions'
-
-async function solveQuestion(answer: Answer) {
-    await fetch(`${API_URL}/${answer.questionId}/solve`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            breedId: answer.breedId
-        })
-    })
-
-    const response = await fetch(`${API_URL}/${answer.questionId}`, {
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    const data = await response.json()
-    return data.status as QuestionStatus
-}
+import {SolvedQuestion} from "../models/SolvedQuestion.tsx";
+import {solveQuestion} from "../services/solveQuestion.ts";
 
 export default function useSolveQuestion(answer: Answer | null | undefined) {
-    const [questionStatus, setQuestionStatus] = useState<QuestionStatus>(QuestionStatus.UNKNOWN)
+    const [solvedQuestion, setSolvedQuestion] = useState<SolvedQuestion>()
 
     useEffect(() => {
-        if (!answer) {
+        if (answer == null) {
+            setSolvedQuestion(undefined)
             return
         }
-        solveQuestion(answer).then(status => {
-            setQuestionStatus(status)
+        solveQuestion(answer).then(solvedQuestion => {
+            setSolvedQuestion(solvedQuestion)
         })
             .catch(e => {
                 console.error("Error solving question", e)
-                setQuestionStatus(QuestionStatus.UNKNOWN)
+                setSolvedQuestion(undefined)
             })
     }, [answer])
 
-    return questionStatus
+    return solvedQuestion
 }

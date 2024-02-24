@@ -1,22 +1,15 @@
-import QuestionCard from "./components/QuestionCard.tsx";
-import useQuestion from "./hooks/useQuestion.tsx";
+import useCreateQuestion from "./hooks/useCreateQuestion.tsx";
 import {Answer} from "./models/Answer.tsx";
 import useSolveQuestion from "./hooks/useSolveQuestion.tsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
+import {QuestionStatus} from "./models/QuestionStatus.tsx";
+import FailedQuestion from "./components/FailedQuestion.tsx";
+import QuestionCard from "./components/QuestionCard.tsx";
 
 export default function App() {
     const [answer, setAnswer] = useState<Answer | null | undefined>(null)
-    const questionStatus = useSolveQuestion(answer)
-    const {question, loading} = useQuestion(questionStatus)
-
-    useEffect(() => {
-        setAnswer(null)
-        if (questionStatus === "SOLVED") {
-            console.log("Question solved!")
-        } else if (questionStatus === "FAILED") {
-            console.log("Question failed!")
-        }
-    }, [questionStatus])
+    const solvedQuestion = useSolveQuestion(answer)
+    const {question, loading} = useCreateQuestion(solvedQuestion)
 
     function handleAnswer(answer: Answer) {
         setAnswer(answer)
@@ -30,8 +23,10 @@ export default function App() {
                 </h1>
             </div>
             {loading && <h1 className="m-auto text-center">Loading...</h1>}
-            {question &&
-                <QuestionCard question={question} handleAnswer={handleAnswer}/>}
+            {solvedQuestion?.status == QuestionStatus.FAILED &&
+                <FailedQuestion expectedBreedName={solvedQuestion.expectedBreedName}/>}
+            {question && <QuestionCard question={question} onAnswer={handleAnswer}/>
+            }
         </div>
     )
 }
