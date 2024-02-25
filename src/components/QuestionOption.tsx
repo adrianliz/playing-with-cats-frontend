@@ -1,4 +1,4 @@
-import {CatBreed} from "../models/Question.tsx";
+import {CatBreed} from "../models/Question.ts";
 
 export default function QuestionOption({breed, onClic}: {
     breed: CatBreed,

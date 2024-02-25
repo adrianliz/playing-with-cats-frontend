@@ -1,6 +1,6 @@
-import {Question} from "../models/Question.tsx";
+import {Question} from "../models/Question.ts";
 import QuestionOption from "./QuestionOption.tsx";
-import {Answer} from "../models/Answer.tsx";
+import {Answer} from "../models/Answer.ts";
 
 export default function QuestionCard({question, onAnswer}: {
     question: Question,

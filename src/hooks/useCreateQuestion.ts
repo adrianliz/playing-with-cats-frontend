@@ -1,15 +1,15 @@
 import {useEffect, useState} from "react";
-import {Question} from "../models/Question.tsx";
+import {Question} from "../models/Question.ts";
 import {createQuestion} from "../services/createQuestion.ts";
-import {SolvedQuestion} from "../models/SolvedQuestion.tsx";
-import {QuestionStatus} from "../models/QuestionStatus.tsx";
+import {QuestionStatus} from "../models/QuestionStatus.ts";
+import {GameResult} from "../models/GameResult.ts";
 
-export default function useCreateQuestion(solvedQuestion: SolvedQuestion | null | undefined) {
+export default function useCreateQuestion(gameResult: GameResult | null | undefined) {
     const [question, setQuestion] = useState<Question>()
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (solvedQuestion?.status == QuestionStatus.FAILED) {
+        if (gameResult?.solvedQuestion.status == QuestionStatus.FAILED) {
             setQuestion(undefined)
             setLoading(false)
             return
@@ -21,7 +21,7 @@ export default function useCreateQuestion(solvedQuestion: SolvedQuestion | null 
         }).catch(e => {
             console.error("Error creating question", e)
         }).finally(() => setLoading(false))
-    }, [solvedQuestion])
+    }, [gameResult])
 
     return {question, loading}
 }

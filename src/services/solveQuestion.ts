@@ -1,4 +1,4 @@
-import {Answer} from "../models/Answer.tsx";
+import {Answer} from "../models/Answer.ts";
 
 export async function solveQuestion(answer: Answer) {
     const API_URL = import.meta.env.VITE_API_URL

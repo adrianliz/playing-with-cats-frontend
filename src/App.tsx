@@ -1,15 +1,28 @@
-import useCreateQuestion from "./hooks/useCreateQuestion.tsx";
-import {Answer} from "./models/Answer.tsx";
-import useSolveQuestion from "./hooks/useSolveQuestion.tsx";
-import {useState} from "react";
-import {QuestionStatus} from "./models/QuestionStatus.tsx";
+import useCreateQuestion from "./hooks/useCreateQuestion.ts";
+import {Answer} from "./models/Answer.ts";
+import useGameResult from "./hooks/useGameResult.ts";
+import {useEffect, useState} from "react";
+import {QuestionStatus} from "./models/QuestionStatus.ts";
 import GameResultCard from "./components/GameResultCard.tsx";
 import QuestionCard from "./components/QuestionCard.tsx";
+import Timer from "./components/Timer.tsx";
 
 export default function App() {
     const [answer, setAnswer] = useState<Answer | null | undefined>(null)
-    const solvedQuestion = useSolveQuestion(answer)
-    const {question, loading} = useCreateQuestion(solvedQuestion)
+    const [secondsElapsed, setSecondsElapsed] = useState(0)
+    const gameResult = useGameResult(answer, secondsElapsed)
+    const {question, loading} = useCreateQuestion(gameResult)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSecondsElapsed(seconds => seconds + 1);
+        }, 1000);
+        if (gameResult?.solvedQuestion.status == QuestionStatus.FAILED) {
+            setSecondsElapsed(0)
+            clearInterval(interval)
+        }
+        return () => clearInterval(interval);
+    }, [setSecondsElapsed, gameResult]);
 
     function handleAnswer(answer: Answer) {
         setAnswer(answer)
@@ -26,11 +39,14 @@ export default function App() {
                     Playing with cats!
                 </h1>
             </div>
+            {gameResult?.solvedQuestion.status != QuestionStatus.FAILED &&
+                <Timer secondsElapsed={secondsElapsed}/>}
             {loading && <h1 className="m-auto text-center">Loading...</h1>}
-            {solvedQuestion?.status == QuestionStatus.FAILED &&
-                <GameResultCard expectedBreed={solvedQuestion.expectedBreed} onPlayAgain={handlePlayAgain}/>}
-            {question && <QuestionCard question={question} onAnswer={handleAnswer}/>
-            }
+            {gameResult?.solvedQuestion.status == QuestionStatus.FAILED &&
+                <GameResultCard gameResult={gameResult} onPlayAgain={handlePlayAgain}/>}
+            {question &&
+
+                <QuestionCard question={question} onAnswer={handleAnswer}/>}
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import {CatBreed} from "../models/Question.tsx";
+import {CatBreed} from "../models/Question.ts";
 
 export async function createQuestion() {
     const API_URL = import.meta.env.VITE_API_URL
