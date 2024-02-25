@@ -21,7 +21,7 @@ export default function useGameResult(answer: Answer | null | undefined, seconds
             setGameResult({solvedQuestion, hits, secondsElapsed})
         })
             .catch(e => {
-                console.error("Error solving question", e)
+                console.error("Error when calling solveQuestion", e)
                 setGameResult(undefined)
             })
     }, [answer])

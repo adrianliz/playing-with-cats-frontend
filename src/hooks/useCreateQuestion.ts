@@ -19,7 +19,7 @@ export default function useCreateQuestion(gameResult: GameResult | null | undefi
         createQuestion().then(question => {
             setQuestion(question)
         }).catch(e => {
-            console.error("Error creating question", e)
+            console.error("Error calling createQuestion", e)
         }).finally(() => setLoading(false))
     }, [gameResult])
 

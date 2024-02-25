@@ -6,6 +6,8 @@ import {QuestionStatus} from "./models/QuestionStatus.ts";
 import GameResultCard from "./components/GameResultCard.tsx";
 import QuestionCard from "./components/QuestionCard.tsx";
 import Timer from "./components/Timer.tsx";
+import {faCat} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default function App() {
     const [answer, setAnswer] = useState<Answer | null | undefined>(null)
@@ -35,9 +37,8 @@ export default function App() {
     return (
         <div className="container flex flex-col max-w-sm max-h m-auto h-screen">
             <div className="flex justify-center items-center m-6 pb-2 border-b-2">
-                <h1 className="m-2+4 text-4xl font-bold">
-                    Playing with cats!
-                </h1>
+                <FontAwesomeIcon className="text-4xl mr-4" icon={faCat}/>
+                <h1 className="text-3xl text-bold">Playing with cats!</h1>
             </div>
             {gameResult?.solvedQuestion.status != QuestionStatus.FAILED &&
                 <Timer secondsElapsed={secondsElapsed}/>}
@@ -45,7 +46,6 @@ export default function App() {
             {gameResult?.solvedQuestion.status == QuestionStatus.FAILED &&
                 <GameResultCard gameResult={gameResult} onPlayAgain={handlePlayAgain}/>}
             {question &&
-
                 <QuestionCard question={question} onAnswer={handleAnswer}/>}
         </div>
     )
