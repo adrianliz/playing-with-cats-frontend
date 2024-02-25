@@ -21,6 +21,9 @@ export async function solveQuestion(answer: Answer) {
     const data = await response.json()
     return {
         status: data.status,
-        expectedBreedName: data.expectedBreedName
+        expectedBreed: {
+            name: data.expectedBreed.name,
+            infoUrl: data.expectedBreed.infoUrl
+        }
     }
 }

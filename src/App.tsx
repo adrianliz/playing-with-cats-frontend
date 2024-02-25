@@ -3,7 +3,7 @@ import {Answer} from "./models/Answer.tsx";
 import useSolveQuestion from "./hooks/useSolveQuestion.tsx";
 import {useState} from "react";
 import {QuestionStatus} from "./models/QuestionStatus.tsx";
-import FailedQuestion from "./components/FailedQuestion.tsx";
+import GameResultCard from "./components/GameResultCard.tsx";
 import QuestionCard from "./components/QuestionCard.tsx";
 
 export default function App() {
@@ -15,6 +15,10 @@ export default function App() {
         setAnswer(answer)
     }
 
+    function handlePlayAgain() {
+        setAnswer(null)
+    }
+
     return (
         <div className="container flex flex-col max-w-sm max-h m-auto h-screen">
             <div className="flex justify-center items-center m-6 pb-2 border-b-2">
@@ -24,7 +28,7 @@ export default function App() {
             </div>
             {loading && <h1 className="m-auto text-center">Loading...</h1>}
             {solvedQuestion?.status == QuestionStatus.FAILED &&
-                <FailedQuestion expectedBreedName={solvedQuestion.expectedBreedName}/>}
+                <GameResultCard expectedBreed={solvedQuestion.expectedBreed} onPlayAgain={handlePlayAgain}/>}
             {question && <QuestionCard question={question} onAnswer={handleAnswer}/>
             }
         </div>

@@ -9,7 +9,6 @@ export default function QuestionCard({question, onAnswer}: {
 
     function handleClic(e: React.MouseEvent<HTMLButtonElement>, breedId: string) {
         e.preventDefault()
-        console.log("Clicked on: ", breedId)
         onAnswer({questionId: question.id, breedId: breedId})
     }
 
