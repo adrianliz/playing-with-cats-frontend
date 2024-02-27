@@ -2,7 +2,6 @@ import useCreateQuestion from "./hooks/useCreateQuestion.ts";
 import {Answer} from "./models/Answer.ts";
 import useGameResult from "./hooks/useGameResult.ts";
 import {useEffect, useState} from "react";
-import {QuestionStatus} from "./models/QuestionStatus.ts";
 import GameResultCard from "./components/GameResultCard.tsx";
 import QuestionCard from "./components/QuestionCard.tsx";
 import Timer from "./components/Timer.tsx";
@@ -13,18 +12,23 @@ export default function App() {
     const [answer, setAnswer] = useState<Answer | null | undefined>(null)
     const [secondsElapsed, setSecondsElapsed] = useState(0)
     const gameResult = useGameResult(answer, secondsElapsed)
-    const {question, loading} = useCreateQuestion(gameResult)
+    const {question, loadingQuestion} = useCreateQuestion(gameResult)
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        const clock = setInterval(() => {
+            if (loadingQuestion) {
+                return
+            }
             setSecondsElapsed(seconds => seconds + 1);
         }, 1000);
-        if (gameResult?.solvedQuestion.status == QuestionStatus.FAILED) {
+
+        if (gameResult?.failed) {
+            clearInterval(clock)
             setSecondsElapsed(0)
-            clearInterval(interval)
         }
-        return () => clearInterval(interval);
-    }, [setSecondsElapsed, gameResult]);
+
+        return () => clearInterval(clock);
+    }, [gameResult, loadingQuestion]);
 
     function handleAnswer(answer: Answer) {
         setAnswer(answer)
@@ -40,10 +44,10 @@ export default function App() {
                 <FontAwesomeIcon className="text-4xl mr-4" icon={faCat}/>
                 <h1 className="text-3xl text-bold">Playing with cats!</h1>
             </div>
-            {gameResult?.solvedQuestion.status != QuestionStatus.FAILED &&
+            {gameResult?.solved &&
                 <Timer secondsElapsed={secondsElapsed}/>}
-            {loading && <h1 className="m-auto text-center">Loading...</h1>}
-            {gameResult?.solvedQuestion.status == QuestionStatus.FAILED &&
+            {loadingQuestion && <h1 className="m-auto text-center">Loading...</h1>}
+            {gameResult?.failed &&
                 <GameResultCard gameResult={gameResult} onPlayAgain={handlePlayAgain}/>}
             {question &&
                 <QuestionCard question={question} onAnswer={handleAnswer}/>}

@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {Question} from "../models/Question.ts";
 import {createQuestion} from "../services/createQuestion.ts";
-import {QuestionStatus} from "../models/QuestionStatus.ts";
 import {GameResult} from "../models/GameResult.ts";
 
 export default function useCreateQuestion(gameResult: GameResult | null | undefined) {
@@ -9,7 +8,7 @@ export default function useCreateQuestion(gameResult: GameResult | null | undefi
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (gameResult?.solvedQuestion.status == QuestionStatus.FAILED) {
+        if (gameResult?.failed) {
             setQuestion(undefined)
             setLoading(false)
             return
@@ -23,5 +22,5 @@ export default function useCreateQuestion(gameResult: GameResult | null | undefi
         }).finally(() => setLoading(false))
     }, [gameResult])
 
-    return {question, loading}
+    return {question, loadingQuestion: loading}
 }

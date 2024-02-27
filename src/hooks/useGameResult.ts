@@ -18,7 +18,7 @@ export default function useGameResult(answer: Answer | null | undefined, seconds
             if (solvedQuestion.status == QuestionStatus.SOLVED) {
                 setHits(hits => hits + 1)
             }
-            setGameResult({solvedQuestion, hits, secondsElapsed})
+            setGameResult(new GameResult(solvedQuestion, hits, secondsElapsed))
         })
             .catch(e => {
                 console.error("Error when calling solveQuestion", e)
