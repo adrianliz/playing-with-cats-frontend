@@ -1,6 +1,6 @@
 import {CatBreed} from "../models/SolvedQuestion.ts";
 
-export default function GameResultCard({failedBreed, secondsElapsed, hits, onPlayAgain}: {
+export default function GameResult({failedBreed, secondsElapsed, hits, onPlayAgain}: {
     failedBreed: CatBreed,
     secondsElapsed: number,
     hits: number,

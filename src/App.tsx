@@ -1,7 +1,7 @@
 import useCreateQuestion from "./hooks/useCreateQuestion.ts";
 import {Answer} from "./models/Answer.ts";
 import useSolveQuestion from "./hooks/useSolveQuestion.ts";
-import GameResultCard from "./components/GameResultCard.tsx";
+import GameResult from "./components/GameResult.tsx";
 import QuestionCard from "./components/QuestionCard.tsx";
 import Timer from "./components/Timer.tsx";
 import {faCat} from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import useTimer from "./hooks/useTimer.ts";
 import {QuestionStatus} from "./models/QuestionStatus.ts";
 import useGameHits from "./hooks/useGameHits.ts";
+import Footer from "./components/Footer.tsx";
+import Loader from "./components/Loader.tsx";
 
 export default function App() {
     const {solvedQuestion, setAnswer} = useSolveQuestion()
@@ -34,14 +36,15 @@ export default function App() {
             </div>
             {solvedQuestion?.status != QuestionStatus.FAILED &&
                 <Timer secondsElapsed={secondsElapsed}/>}
-            {loadingQuestion && <h1 className="m-auto text-center">Loading...</h1>}
+            {loadingQuestion && <Loader/>}
             {solvedQuestion?.status == QuestionStatus.FAILED &&
-                <GameResultCard failedBreed={solvedQuestion.expectedBreed}
-                                secondsElapsed={secondsElapsed}
-                                hits={hits}
-                                onPlayAgain={handlePlayAgain}/>}
+                <GameResult failedBreed={solvedQuestion.expectedBreed}
+                            secondsElapsed={secondsElapsed}
+                            hits={hits}
+                            onPlayAgain={handlePlayAgain}/>}
             {question &&
                 <QuestionCard question={question} onAnswer={handleAnswer}/>}
+            {!loadingQuestion && <Footer/>}
         </div>
     )
 }
