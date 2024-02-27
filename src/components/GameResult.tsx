@@ -1,4 +1,5 @@
 import {CatBreed} from "../models/SolvedQuestion.ts";
+import SocialMedia from "./SocialMedia.tsx";
 
 export default function GameResult({failedBreed, secondsElapsed, hits, onPlayAgain}: {
     failedBreed: CatBreed,
@@ -6,6 +7,7 @@ export default function GameResult({failedBreed, secondsElapsed, hits, onPlayAga
     hits: number,
     onPlayAgain: () => void
 }) {
+
     return (
         <div className="flex flex-col items-center">
             <p className="text text-lg border-2 border-solid border-black m-6 p-4">You got&nbsp;
@@ -20,11 +22,16 @@ export default function GameResult({failedBreed, secondsElapsed, hits, onPlayAga
             </p>
 
             <div className="mt-8 flex flex-col items-center">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={onPlayAgain}>
+                <button
+                    className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow-lg"
+                    onClick={onPlayAgain}>
                     Try again
                 </button>
             </div>
+
+            <SocialMedia
+                diffusionMessage={
+                    `Do you know how to identify a ${failedBreed.name}?\nI got ${hits} hits in ${secondsElapsed} seconds!\nTry to beat me!`}/>
         </div>
     )
 }
